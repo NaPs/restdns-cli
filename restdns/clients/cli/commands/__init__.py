@@ -64,7 +64,11 @@ class ApiCommand(Command):
         except ValueError:
             content = ans.text
         if not ans.ok:
-            raise RestdnsCliRuntimeError(content)
+            if 'application/json' in ans.headers['content-type']:
+                raise RestdnsCliRuntimeError(content)
+            else:
+                raise RestdnsCliRuntimeError('RestDNS server answered HTTP Error %d' % ans.status_code)
+
         return content, ans
 
     def get(self, *args, **kwargs):
