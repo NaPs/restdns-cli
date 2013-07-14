@@ -1,0 +1,63 @@
+#!/usr/bin/env python
+#coding=utf8
+
+
+import os
+import argparse
+
+import xdg.BaseDirectory
+import pkg_resources
+
+from restdns.clients.cli.printer import printer
+from restdns.clients.cli.exceptions import RestdnsCliRuntimeError
+from restdns.clients.cli.config import parse_config
+
+
+DEFAULT_CONFIG = os.path.join(xdg.BaseDirectory.xdg_config_home, 'restdns-cli.conf')
+
+
+def main():
+    """ Binary entry-point.
+    """
+
+    aparser = argparse.ArgumentParser()
+    aparser.add_argument('-e', '--editor', default=os.environ.get('EDITOR', 'vim'))
+    aparser.add_argument('-d', '--debug', action='store_true', default=False)
+    aparser.add_argument('-V', '--verbose', action='store_true', default=False)
+    aparser.add_argument('-c', '--config', default=DEFAULT_CONFIG)
+    aparser_subs = aparser.add_subparsers(help='restdns-cli commands')
+
+    # Register all the commands:
+    commands = {}
+    for entrypoint in pkg_resources.iter_entry_points(group='restdns.clients.cli.commands'):
+        command_class = entrypoint.load()
+        commands[entrypoint.name] = command_class(entrypoint.name, aparser_subs)
+        commands[entrypoint.name].prepare()
+
+    # Parse the command line arguments:
+    args = aparser.parse_args()
+
+    # Configure the main printer:
+    printer.configure(verbose=args.verbose, debug=args.debug, editor=args.editor)
+
+    # Parse configuration:
+    try:
+        config = parse_config(args.config)
+    except IOError as err:
+        if err.errno == 2:
+            config = None
+        else:
+            raise
+
+    # Execute the selected command:
+    printer.debug('Executing command {cmd}', cmd=args.command)
+    try:
+        args.command(args, config)
+    except RestdnsCliRuntimeError as err:
+        printer.p(err.as_text())
+    except KeyboardInterrupt:
+        printer.p('Interrupted by user.')
+
+
+if __name__ == '__main__':
+    main()
