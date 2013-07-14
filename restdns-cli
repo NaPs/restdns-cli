@@ -54,7 +54,7 @@ def main():
     try:
         args.command(args, config)
     except RestdnsCliRuntimeError as err:
-        printer.p(err.as_text())
+        printer.p(err.as_text().replace('{', '{{').replace('}', '}}'))
     except KeyboardInterrupt:
         printer.p('Interrupted by user.')
 
