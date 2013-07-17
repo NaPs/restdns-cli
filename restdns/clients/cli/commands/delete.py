@@ -31,7 +31,7 @@ class RDelete(ApiCommand):
     def prepare(self):
         self.add_arg('zone_name', metavar='zone-name',
                      help='Name of zone of which to delete the record')
-        self.add_arg('record_id', metavar='record-id', type=int,
+        self.add_arg('record_uuid', metavar='record-uuid',
                      help='Identity of the record to delete')
 
     def api_run(self, args, config):
@@ -44,7 +44,7 @@ class RDelete(ApiCommand):
             return
         records, ans = self.get(zone['records_url'])
         for record in records['records']:
-            if record['id'] == args.record_id:
+            if record['uuid'] == args.record_uuid:
                 break
         else:
             printer.p('Unknown record with provided id')

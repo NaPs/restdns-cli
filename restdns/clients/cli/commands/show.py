@@ -39,6 +39,6 @@ class Show(ApiCommand):
             # Get zone records:
             printer.p('RECORD LIST:')
             records, ans = self.get(zone['records_url'])
-            printer.table(['id', 'name', 'type', 'parameters'],
-                          [(x['id'], x['name'], x['type'].upper(),
+            printer.table(['uuid', 'name', 'type', 'parameters'],
+                          [(x['uuid'], x['name'], x['type'].upper(),
                             format_parameters(x['parameters'])) for x in records['records']])
