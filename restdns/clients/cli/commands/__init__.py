@@ -57,6 +57,7 @@ class ApiCommand(Command):
         if data is not None:
             data = json.dumps(data)
             headers['content-type'] = 'application/json'
+        headers['accept'] = 'application/json'
         resource = self._base_url + resource
         ans = requests.request(method, resource, data=data, headers=headers)
         try:
