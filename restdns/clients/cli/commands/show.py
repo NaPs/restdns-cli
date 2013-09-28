@@ -29,6 +29,7 @@ class Show(ApiCommand):
                     break
             else:
                 printer.p('Unknown zone with this name')
+                return
 
             printer.p('ZONE DETAILS:')
             zone_data = [(x, zone[x]) for x in ('name', 'primary_ns', 'rname', 'refresh', 'retry', 'expire', 'minimum', 'serial')]
