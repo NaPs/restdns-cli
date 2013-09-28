@@ -47,7 +47,7 @@ class ApiCommand(Command):
     """
 
     def run(self, args, config):
-        self._base_url = config.get('base_url').rstrip('/')
+        self._base_url = config.get('base_url').geturl().rstrip('/')
         self.api_run(args, config)
 
     def request(self, resource, method='GET', data=None):
