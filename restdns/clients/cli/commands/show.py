@@ -32,7 +32,7 @@ class Show(ApiCommand):
 
             printer.p('ZONE DETAILS:')
             zone_data = [(x, zone[x]) for x in ('name', 'primary_ns', 'rname', 'refresh', 'retry', 'expire', 'minimum', 'serial')]
-            printer.table(['', ''], zone_data, header=False, hrules=prettytable.ALL)
+            printer.table(['a', 'b'], zone_data, header=False, hrules=prettytable.ALL)
 
             printer.p()
 
