@@ -30,6 +30,7 @@ setup(name='restdns-cli',
                                                      'rrcreate = restdns.clients.cli.commands.create:RRCreate',
                                                      'delete = restdns.clients.cli.commands.delete:Delete',
                                                      'rdelete = restdns.clients.cli.commands.delete:RDelete',
-                                                     'types = restdns.clients.cli.commands.types:Types']},
+                                                     'types = restdns.clients.cli.commands.types:Types',
+                                                     'check = restdns.clients.cli.commands.check:Check']},
       install_requires=['requests', 'PrettyTable', 'pyxdg', 'progressbar',
                         'dotconf', 'dnspython'])
